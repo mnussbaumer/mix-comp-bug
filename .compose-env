@@ -1,0 +1,9 @@
+DATABASE_URL=ecto://postgres:postgres@db/postgres
+PGDATA=/var/lib/postgresql/data
+PHX_HOST=localhost
+SECRET_KEY_BASE=ExzqUq+/tvIG+uaIly83PWdmYYdVkXMl8j9sbOhfslgbne64rnjq6yrQIRQr7FOr
+POSTGRES_DB=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_USER=postgres
+PGUSER=postgres
+MIX_ENV=dev

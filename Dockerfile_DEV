@@ -1,0 +1,46 @@
+ARG BUILDER_IMAGE="erlang:27-alpine"
+
+################################
+## Build Layer
+################################
+
+FROM ${BUILDER_IMAGE} AS builder
+
+################################
+
+EXPOSE 4000
+
+ENV MIX_ENV=dev \
+    LANG=C.UTF-8 \
+    TERM=xterm \
+    ELIXIR_VERSION="1.18.1"
+
+RUN apk --no-cache --update-cache --available upgrade \
+    && apk add \
+    build-base \
+    erlang-dev \
+    openssh \
+    git \
+    make \
+    inotify-tools \
+    curl \
+    jq 
+
+WORKDIR /app
+
+ENV ELIXIR_VERSION="1.18.1" \
+    MIX_HOME=/opt/mix \
+    HEX_HOME=/opt/hex \
+    PHX_SERVER=true
+
+RUN git clone https://github.com/elixir-lang/elixir --depth 1 --branch "v${ELIXIR_VERSION}" \
+    && cd elixir \
+    && make && make install \
+    && mkdir -p ${HEX_HOME} \
+    && mix local.hex --force \
+    && mix local.rebar --force \
+    && cd $HOME \
+    && rm -rf /tmp/elixir-build \
+    && cd /app
+
+ENTRYPOINT ["/dev-entrypoint.sh"]

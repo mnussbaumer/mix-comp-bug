@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:17.2
+    healthcheck:
+      test: ["CMD", "pg_isready", "--host=localhost", "--username=${POSTGRES_USER}"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+    deploy:
+      restart_policy:
+        condition: on-failure    
+    ports:
+      - 5432:5432
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    env_file: ./.compose-env
+  server:
+    depends_on:
+      - db
+      - third
+    build:
+      context: .
+      dockerfile: ./Dockerfile_DEV
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    entrypoint: ./dev-entrypoint.sh
+    deploy:
+      replicas: ${SERVER_REPLICAS:-1}
+    env_file:
+      - ./.compose-env
+  third:
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: ./Dockerfile_DEV_THIRD
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    entrypoint: ./dev-third-entrypoint.sh
+    env_file:
+      - ./.compose-env
+  
+volumes:
+  db_data:
