@@ -21,6 +21,7 @@ _build_third_1
 
 But then creates the deps folders inside all sub-apps
 
+```
 apps/server/deps_1
 apps/server/deps_third_1
 apps/db/deps_1
