@@ -1,5 +1,9 @@
 # Bugsbunny
 
+#### A solution for the missing/misplaced deps, as of when this issue was opened, is to use absolute paths for the MIX_DEPS_PATH, this will prevent it from being resolved/expanded differently in different stages of compilation:
+https://github.com/elixir-lang/elixir/issues/14515
+
+
 This is to show the issue of using custom folders for deps & build.
 I'm not using this because I want to be fancy, although I also want that, I'm using this so that I manage to run multi-node elixir apps locally for development purposes. The issue that occurs without custom folders is explained afterwards, but this still looks like a bug so I guess it doesn't matter why I'm doing this.
 
